@@ -41,7 +41,7 @@ void calculate_window_dimensions(int actual_screen_width, int actual_screen_heig
     field_height = BOARD_HEIGHT * cell_size;
     
     // Calculate UI dimensions
-    ui_panel_width = cell_size * 6;  // Space for next piece and UI (reduced)
+    ui_panel_width = cell_size * 7;  // Space for next piece and UI
     ui_margin = cell_size;           // Margins around the field
     
     // Calculate window width to fit field + UI + margins (minimal width)
