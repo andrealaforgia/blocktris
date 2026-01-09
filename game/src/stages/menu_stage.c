@@ -1,12 +1,12 @@
 /**
  * @file menu_stage.c
- * @brief Tetris menu stage implementation
+ * @brief BlockTris menu stage implementation
  */
 
 #include "menu_stage.h"
 #include "keyboard.h"
 #include "events.h"
-#include "tetris_renderer.h"
+#include "blocktris_renderer.h"
 #include "drawing_primitives.h"
 #include "frame.h"
 #include "clock.h"
@@ -81,7 +81,6 @@ game_stage_action_t menu_stage_update(stage_t *stage) {
     const char* title_text = "BLOCKTRIS";
     int title_scale = 6;
     int title_width = get_arcade_text_width_scaled(&game->arcade_font, title_text, title_scale);
-    int title_height = 7 * title_scale; // Arcade font char height is 7 pixels
     int title_x = (LOGICAL_WIDTH - title_width) / 2;
     int title_y = LOGICAL_HEIGHT / 3;
     
@@ -98,6 +97,7 @@ game_stage_action_t menu_stage_update(stage_t *stage) {
         int start_scale = 3;
         int start_width = get_arcade_text_width_scaled(&game->arcade_font, start_text, start_scale);
         int start_x = (LOGICAL_WIDTH - start_width) / 2;
+        int title_height = 7 * title_scale; // Arcade font char height is 7 pixels
         int start_y = title_y + title_height + 40;
         
         render_arcade_text_scaled(&game->arcade_font, &game->graphics_context, 

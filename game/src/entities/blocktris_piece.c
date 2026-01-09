@@ -1,9 +1,9 @@
 /**
- * @file tetris_piece.c
- * @brief Tetris piece entity implementation using pentomino coordinate system
+ * @file blocktris_piece.c
+ * @brief BlockTris piece entity implementation using pentomino coordinate system
  */
 
-#include "tetris_piece.h"
+#include "blocktris_piece.h"
 #include "pentomino.h"
 #include <stdlib.h>
 
@@ -33,7 +33,7 @@ static const color_t piece_colors[NUM_PIECE_TYPES] = {
     [PIECE_Z_MIRROR] = 0x87CEEB  // Sky Blue
 };
 
-void tetris_piece_init(tetris_piece_t* piece) {
+void blocktris_piece_init(blocktris_piece_t* piece) {
     piece->type = PIECE_EMPTY;
     piece->x = 0;
     piece->y = 0;
@@ -42,14 +42,14 @@ void tetris_piece_init(tetris_piece_t* piece) {
     piece->color = COLOR_WHITE;
 }
 
-color_t tetris_piece_get_color(piece_type_t type) {
-    if (type >= NUM_PIECE_TYPES || type == PIECE_EMPTY) {
+color_t blocktris_piece_get_color(piece_type_t type) {
+    if (type >= NUM_PIECE_TYPES) {
         return COLOR_WHITE;
     }
     return piece_colors[type];
 }
 
-const bool (*tetris_piece_get_shape(piece_type_t type, int rotation))[PIECE_SIZE] {
+const bool (*blocktris_piece_get_shape(piece_type_t type, int rotation))[PIECE_SIZE] {
     // Validate inputs
     if (type >= NUM_PIECE_TYPES || type == PIECE_EMPTY || rotation < 0) {
         return NULL;
@@ -67,39 +67,39 @@ const bool (*tetris_piece_get_shape(piece_type_t type, int rotation))[PIECE_SIZE
     return rotation_cache[type][rotation];
 }
 
-void tetris_piece_rotate_clockwise(tetris_piece_t* piece) {
+void blocktris_piece_rotate_clockwise(blocktris_piece_t* piece) {
     piece->rotation = (piece->rotation + 1) % 4;
 }
 
-void tetris_piece_rotate_counter_clockwise(tetris_piece_t* piece) {
+void blocktris_piece_rotate_counter_clockwise(blocktris_piece_t* piece) {
     piece->rotation = (piece->rotation + 3) % 4; // +3 is same as -1 mod 4
 }
 
-void tetris_piece_move(tetris_piece_t* piece, int dx, int dy) {
+void blocktris_piece_move(blocktris_piece_t* piece, int dx, int dy) {
     piece->x += dx;
     piece->y += dy;
 }
 
-piece_type_t tetris_piece_random_type(void) {
+piece_type_t blocktris_piece_random_type(void) {
     return rand() % NUM_PIECE_TYPES;
 }
 
-void tetris_piece_reset(tetris_piece_t* piece, piece_type_t type, int x, int y) {
+void blocktris_piece_reset(blocktris_piece_t* piece, piece_type_t type, int x, int y) {
     piece->type = type;
     piece->x = x;
     piece->y = y;
     piece->rotation = 0;
     piece->active = true;
-    piece->color = tetris_piece_get_color(type);
+    piece->color = blocktris_piece_get_color(type);
 }
 
-bool tetris_piece_is_cell_filled(piece_type_t type, int rotation, int x, int y) {
+bool blocktris_piece_is_cell_filled(piece_type_t type, int rotation, int x, int y) {
     // Validate coordinates
     if (x < 0 || x >= PIECE_SIZE || y < 0 || y >= PIECE_SIZE) {
         return false;
     }
     
-    const bool (*shape)[PIECE_SIZE] = tetris_piece_get_shape(type, rotation);
+    const bool (*shape)[PIECE_SIZE] = blocktris_piece_get_shape(type, rotation);
     if (!shape) {
         return false;
     }

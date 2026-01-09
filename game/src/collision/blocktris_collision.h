@@ -1,16 +1,16 @@
 /**
- * @file tetris_collision.h
- * @brief Tetris collision detection system
+ * @file blocktris_collision.h
+ * @brief BlockTris collision detection system
  *
- * Provides collision detection functions for Tetris piece movement,
+ * Provides collision detection functions for BlockTris piece movement,
  * rotation, and placement validation.
  */
 
-#ifndef TETRIS_COLLISION_H_
-#define TETRIS_COLLISION_H_
+#ifndef BLOCKTRIS_COLLISION_H_
+#define BLOCKTRIS_COLLISION_H_
 
 #include "game_board.h"
-#include "tetris_piece.h"
+#include "blocktris_piece.h"
 #include <stdbool.h>
 
 /**
@@ -23,7 +23,7 @@
  * @param piece_y Y position to check
  * @return true if piece can be placed, false if collision detected
  */
-bool tetris_collision_can_place_piece(const game_board_t *board, piece_type_t piece_type,
+bool blocktris_collision_can_place_piece(const game_board_t *board, piece_type_t piece_type,
                                      int piece_rotation, int piece_x, int piece_y);
 
 /**
@@ -38,7 +38,7 @@ bool tetris_collision_can_place_piece(const game_board_t *board, piece_type_t pi
  * @param dy Y offset to test
  * @return true if piece can move, false if collision detected
  */
-bool tetris_collision_can_move_piece(const game_board_t *board, piece_type_t piece_type,
+bool blocktris_collision_can_move_piece(const game_board_t *board, piece_type_t piece_type,
                                     int piece_rotation, int piece_x, int piece_y, 
                                     int dx, int dy);
 
@@ -53,7 +53,7 @@ bool tetris_collision_can_move_piece(const game_board_t *board, piece_type_t pie
  * @param piece_y Y position of the piece
  * @return true if piece can be rotated, false if collision detected
  */
-bool tetris_collision_can_rotate_piece(const game_board_t *board, piece_type_t piece_type,
+bool blocktris_collision_can_rotate_piece(const game_board_t *board, piece_type_t piece_type,
                                       int current_rotation, int new_rotation,
                                       int piece_x, int piece_y);
 
@@ -67,7 +67,7 @@ bool tetris_collision_can_rotate_piece(const game_board_t *board, piece_type_t p
  * @param piece_y Y position of the piece
  * @return true if piece can fall, false if it has landed
  */
-bool tetris_collision_can_fall(const game_board_t *board, piece_type_t piece_type,
+bool blocktris_collision_can_fall(const game_board_t *board, piece_type_t piece_type,
                               int piece_rotation, int piece_x, int piece_y);
 
 /**
@@ -80,7 +80,7 @@ bool tetris_collision_can_fall(const game_board_t *board, piece_type_t piece_typ
  * @param start_y Starting Y position
  * @return Lowest valid Y position for the piece
  */
-int tetris_collision_find_drop_position(const game_board_t *board, piece_type_t piece_type,
+int blocktris_collision_find_drop_position(const game_board_t *board, piece_type_t piece_type,
                                        int piece_rotation, int piece_x, int start_y);
 
 /**
@@ -95,8 +95,8 @@ int tetris_collision_find_drop_position(const game_board_t *board, piece_type_t 
  * @param piece_y Pointer to Y position (may be modified for successful kick)
  * @return true if rotation is possible (possibly with wall kick), false otherwise
  */
-bool tetris_collision_wall_kick_test(const game_board_t *board, piece_type_t piece_type,
+bool blocktris_collision_wall_kick_test(const game_board_t *board, piece_type_t piece_type,
                                     int current_rotation, int new_rotation,
                                     int *piece_x, int *piece_y);
 
-#endif // TETRIS_COLLISION_H_
+#endif // BLOCKTRIS_COLLISION_H_

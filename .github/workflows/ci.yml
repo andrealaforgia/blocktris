@@ -1,0 +1,106 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        
+    - name: Install Dependencies (Ubuntu)
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev cppcheck clang-format
+        
+    - name: Install Dependencies (macOS)
+      if: matrix.os == 'macos-latest'
+      run: |
+        brew install sdl2 sdl2_image sdl2_mixer sdl2_ttf cppcheck clang-format
+        
+    - name: Build Engine
+      run: |
+        cd engine
+        make
+        
+    - name: Build Game
+      run: make
+      
+    - name: Run Tests
+      run: make test
+      
+    - name: Run Linter
+      run: make lint
+      
+    - name: Check Code Formatting
+      run: |
+        # Check if code is properly formatted
+        make format
+        if ! git diff --exit-code; then
+          echo "Code formatting issues found. Please run 'make format' locally."
+          exit 1
+        fi
+
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Run CodeQL Analysis
+      uses: github/codeql-action/init@v3
+      with:
+        languages: cpp
+        
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+        
+    - name: Build for Analysis
+      run: make
+      
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+
+  release:
+    needs: [build-and-test, security-scan]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+        
+    - name: Build Release
+      run: make
+      
+    - name: Package Release
+      run: |
+        mkdir -p release/blocktris
+        cp tetris release/blocktris/
+        cp README.md release/blocktris/
+        cp -r game/assets release/blocktris/
+        cd release && tar -czf blocktris-linux.tar.gz blocktris/
+        
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: blocktris-linux
+        path: release/blocktris-linux.tar.gz

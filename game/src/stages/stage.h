@@ -1,14 +1,14 @@
 /**
  * @file stage.h
- * @brief Tetris game stage abstraction and lifecycle management
+ * @brief BlockTris game stage abstraction and lifecycle management
  *
  * Defines the stage interface for different game screens like menu,
  * playing, and game over. Provides factory functions and common operations
  * for creating and managing stage transitions using function pointers.
  */
 
-#ifndef TETRIS_STAGE_H_
-#define TETRIS_STAGE_H_
+#ifndef BLOCKTRIS_STAGE_H_
+#define BLOCKTRIS_STAGE_H_
 
 #include "game.h"
 
@@ -36,4 +36,4 @@ stage_ptr create_paused_stage_instance(void);
 // Common stage operations
 void destroy_stage(stage_ptr stage);
 
-#endif // TETRIS_STAGE_H_
+#endif // BLOCKTRIS_STAGE_H_

@@ -91,7 +91,6 @@ game_stage_action_t intro_stage_update(stage_t *stage) {
     if (title_scale < 1) title_scale = 1; // Minimum scale
     
     int actual_title_width = get_arcade_text_width_scaled(&game->arcade_font, title_text, title_scale);
-    int title_height = 7 * title_scale;
     int title_x = (LOGICAL_WIDTH - actual_title_width) / 2;
     int title_y = LOGICAL_HEIGHT / 4;
     

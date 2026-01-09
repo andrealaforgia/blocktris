@@ -1,25 +1,27 @@
 /**
  * @file playing_stage.h
- * @brief Tetris playing stage
+ * @brief BlockTris playing stage
  *
- * Handles the main game play where the actual Tetris game runs.
+ * Handles the main game play where the actual BlockTris game runs.
  */
 
-#ifndef TETRIS_PLAYING_STAGE_H_
-#define TETRIS_PLAYING_STAGE_H_
+#ifndef BLOCKTRIS_PLAYING_STAGE_H_
+#define BLOCKTRIS_PLAYING_STAGE_H_
 
 #include "stage.h"
-#include "tetris_controller.h"
+#include "blocktris_controller.h"
 
 /**
  * Playing stage state
  */
 typedef struct {
     game_ptr game; // Reference to game context
-    tetris_controller_t controller;
+    blocktris_controller_t controller;
     timestamp_ms_t last_fall_time;
     bool game_over_requested;
 } playing_stage_state_t;
+
+typedef playing_stage_state_t *playing_stage_state_ptr;
 
 /**
  * Initialize playing stage
@@ -71,4 +73,4 @@ void playing_stage_update_line_clear_effect(playing_stage_state_t *state);
  */
 void playing_stage_update_countdown(playing_stage_state_t *state);
 
-#endif // TETRIS_PLAYING_STAGE_H_
+#endif // BLOCKTRIS_PLAYING_STAGE_H_

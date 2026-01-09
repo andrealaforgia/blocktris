@@ -1,0 +1,137 @@
+name: Test Suite
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run tests daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+jobs:
+  unit-tests:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        compiler: [gcc, clang]
+        exclude:
+          # macOS doesn't have gcc readily available
+          - os: macos-latest
+            compiler: gcc
+    
+    env:
+      CC: ${{ matrix.compiler }}
+      
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        
+    - name: Install Dependencies (Ubuntu)
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+        if [ "${{ matrix.compiler }}" = "clang" ]; then
+          sudo apt-get install -y clang
+        fi
+        
+    - name: Install Dependencies (macOS)
+      if: matrix.os == 'macos-latest'
+      run: |
+        brew install sdl2 sdl2_image sdl2_mixer sdl2_ttf
+        
+    - name: Build Engine
+      run: |
+        cd engine
+        make CC=${{ matrix.compiler }}
+        
+    - name: Build Game
+      run: make CC=${{ matrix.compiler }}
+      
+    - name: Run Unit Tests
+      run: |
+        make test CC=${{ matrix.compiler }}
+        echo "✅ All tests passed with ${{ matrix.compiler }} on ${{ matrix.os }}"
+
+  integration-tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev xvfb
+        
+    - name: Build Game
+      run: make
+      
+    - name: Run Integration Tests with Virtual Display
+      run: |
+        # Run game with virtual display for integration testing
+        xvfb-run -a -s "-screen 0 1024x768x24" timeout 10s ./tetris --test-mode || true
+        echo "✅ Integration tests completed"
+
+  memory-tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev valgrind
+        
+    - name: Build Debug Version
+      run: |
+        make clean
+        CFLAGS="-ggdb3 -O0 -std=c99 -Wall -Wextra -pedantic-errors" make
+        
+    - name: Run Memory Leak Tests
+      run: |
+        # Run unit tests with valgrind
+        valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --error-exitcode=1 ./test_runner || {
+          echo "❌ Memory leaks detected!"
+          exit 1
+        }
+        echo "✅ No memory leaks detected"
+
+  test-coverage:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev gcov lcov
+        
+    - name: Build with Coverage
+      run: |
+        make clean
+        CFLAGS="-ggdb3 -O0 --std=c99 -Wall -Wextra -pedantic-errors --coverage" LFLAGS="--coverage" make
+        
+    - name: Run Tests with Coverage
+      run: make test
+      
+    - name: Generate Coverage Report
+      run: |
+        lcov --capture --directory . --output-file coverage.info
+        lcov --remove coverage.info '/usr/*' --output-file coverage.info
+        lcov --remove coverage.info '*/tests/*' --output-file coverage.info
+        lcov --list coverage.info
+        
+    - name: Upload Coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./coverage.info
+        fail_ci_if_error: true

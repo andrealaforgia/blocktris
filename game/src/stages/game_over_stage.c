@@ -1,12 +1,12 @@
 /**
  * @file game_over_stage.c
- * @brief Tetris game over stage implementation
+ * @brief BlockTris game over stage implementation
  */
 
 #include "game_over_stage.h"
 #include "keyboard.h"
 #include "events.h"
-#include "tetris_renderer.h"
+#include "blocktris_renderer.h"
 #include "drawing_primitives.h"
 #include "frame.h"
 #include "color.h"
@@ -79,8 +79,8 @@ game_stage_action_t game_over_stage_update(stage_t *stage) {
     clear_frame(&game->graphics_context);
     
     // First render the final game state
-    tetris_renderer_render_board(game, &game->graphics_context);
-    tetris_renderer_render_placed_pieces(&game->board, &game->graphics_context);
+    blocktris_renderer_render_board(game, &game->graphics_context);
+    blocktris_renderer_render_placed_pieces(&game->board, &game->graphics_context);
     
     // Calculate animation progress
     timestamp_ms_t current_time = get_clock_ticks_ms();

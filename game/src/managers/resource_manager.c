@@ -1,6 +1,6 @@
 /**
  * @file resource_manager.c
- * @brief Coordinated Tetris game resource loading and cleanup implementation
+ * @brief Coordinated BlockTris game resource loading and cleanup implementation
  */
 
 #include "resource_manager.h"

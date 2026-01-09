@@ -1,13 +1,13 @@
 /**
  * @file playing_stage.c
- * @brief Tetris playing stage implementation
+ * @brief BlockTris playing stage implementation
  */
 
 #include "playing_stage.h"
 #include "keyboard.h"
 #include "events.h"
-#include "tetris_renderer.h"
-#include "tetris_collision.h"
+#include "blocktris_renderer.h"
+#include "blocktris_collision.h"
 #include "clock.h"
 #include "constants.h"
 #include "frame.h"
@@ -43,7 +43,7 @@ void playing_stage_init(stage_t *stage, game_ptr game) {
     state->last_fall_time = get_clock_ticks_ms();
     
     // Initialize controller
-    tetris_controller_init(&state->controller);
+    blocktris_controller_init(&state->controller);
     
     stage->state = state;
     
@@ -87,7 +87,7 @@ game_stage_action_t playing_stage_update(stage_t *stage) {
     // Only update game logic if not paused and countdown is not showing
     if (!game->paused && !game->show_countdown) {
         // Update controller
-        tetris_controller_update(&state->controller, game, &game->keyboard_state);
+        blocktris_controller_update(&state->controller, game, &game->keyboard_state);
         
         // Update game logic
         playing_stage_update_game_logic(state);
@@ -101,7 +101,7 @@ game_stage_action_t playing_stage_update(stage_t *stage) {
     }
     
     // Render game
-    tetris_renderer_render_game(game, &game->graphics_context);
+    blocktris_renderer_render_game(game, &game->graphics_context);
     
     // If paused, draw pause indicator
     if (game->paused) {
@@ -153,7 +153,7 @@ void playing_stage_handle_piece_fall(playing_stage_state_t *state) {
     
     // Check if piece should fall
     if (current_time - state->last_fall_time >= (timestamp_ms_t)state->game->fall_speed) {
-        if (tetris_collision_can_fall(&state->game->board, 
+        if (blocktris_collision_can_fall(&state->game->board, 
                                      state->game->current_piece_type,
                                      state->game->current_piece_rotation,
                                      state->game->current_piece_x,
@@ -179,11 +179,11 @@ void playing_stage_spawn_new_piece(playing_stage_state_t *state) {
     if (game->next_piece_type != PIECE_EMPTY) {
         game->current_piece_type = game->next_piece_type;
     } else {
-        game->current_piece_type = tetris_piece_random_type();
+        game->current_piece_type = blocktris_piece_random_type();
     }
     
     // Generate next piece
-    game->next_piece_type = tetris_piece_random_type();
+    game->next_piece_type = blocktris_piece_random_type();
     
     // Reset piece position and rotation
     game->current_piece_x = BOARD_WIDTH / 2 - 2;

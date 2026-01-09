@@ -1,6 +1,6 @@
 /**
  * @file main.c
- * @brief Main entry point for Tetris game
+ * @brief Main entry point for BlockTris game
  */
 
 #include "constants.h"
@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    printf("Tetris - Press ESC to quit\n");
+    printf("BlockTris - Press ESC to quit\n");
     printf("Controls: Arrow keys to move, Space to drop, P to pause\n");
 
     // Initialize stage director

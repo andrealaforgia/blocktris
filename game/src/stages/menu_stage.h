@@ -1,12 +1,12 @@
 /**
  * @file menu_stage.h
- * @brief Tetris menu stage
+ * @brief BlockTris menu stage
  *
  * Handles the main menu screen where players can start a new game.
  */
 
-#ifndef TETRIS_MENU_STAGE_H_
-#define TETRIS_MENU_STAGE_H_
+#ifndef BLOCKTRIS_MENU_STAGE_H_
+#define BLOCKTRIS_MENU_STAGE_H_
 
 #include "stage.h"
 
@@ -17,6 +17,8 @@ typedef struct {
     game_ptr game; // Reference to game context
     bool start_game_requested;
 } menu_stage_state_t;
+
+typedef menu_stage_state_t *menu_stage_state_ptr;
 
 /**
  * Initialize menu stage
@@ -33,4 +35,4 @@ game_stage_action_t menu_stage_update(stage_t *stage);
  */
 void menu_stage_cleanup(stage_t *stage);
 
-#endif // TETRIS_MENU_STAGE_H_
+#endif // BLOCKTRIS_MENU_STAGE_H_

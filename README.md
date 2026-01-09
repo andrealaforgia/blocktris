@@ -1,22 +1,49 @@
-# Tetris Game
+# Blocktris
 
-A complete Tetris implementation in C99 using SDL2, following modular game engine architecture patterns.
+A modern block-falling puzzle game written in C99 with SDL2, featuring pentomino pieces and enhanced gameplay mechanics inspired by classic Tetris.
 
 ## Features
 
-- **Classic Tetris Gameplay**: All 7 standard tetromino pieces (I, O, T, S, Z, J, L)
-- **Accurate Physics**: Proper piece rotation, movement, and collision detection
-- **Line Clearing**: Full line detection and clearing with cascade mechanics
-- **Visual Design**: Clean line-based rendering with colored pieces and blue border
-- **Responsive Controls**: Smooth movement with key repeat handling
-- **Performance Optimized**: Object pool patterns and efficient memory management
+- **Pentomino Pieces**: 18 unique pieces including classic tetrominoes and challenging pentomino shapes
+- **Enhanced Graphics**: Smooth countdown sequences, visual effects, and polished UI
+- **Advanced Scoring**: Level progression, line clear bonuses, and combo multipliers
+- **Professional Animation**: Animated countdowns (3-2-1-GO!) with fade effects
+- **Responsive Controls**: Precise movement with key repeat handling and hard drop
+- **Modern Architecture**: Clean C99 code with modular SDL2 engine design
 
-## Game Specifications
+## Gameplay
 
-- **Grid Size**: 20 width × 30 height
-- **Window Size**: 90% of screen width with proper aspect ratio
-- **Piece Colors**: Each tetromino type has its distinct color
-- **Fall Speed**: Configurable timing system (500ms default)
+### Piece Types
+
+The game features an expanded set of puzzle pieces:
+
+**Classic Tetrominoes:**
+- **I-piece**: Cyan (4-block line)
+- **O-piece**: Yellow (2×2 square)
+- **T-piece**: Purple (T-shaped)
+- **S-piece**: Green (S-shaped)
+- **Z-piece**: Red (Z-shaped)
+- **J-piece**: Blue (L-shaped)
+- **L-piece**: Orange (L-shaped)
+
+**Pentomino Pieces:**
+- **X-piece**: Cross shape
+- **U-piece**: U-shaped
+- **V-piece**: V-shaped
+- **W-piece**: W-shaped
+- **N-piece**: Zigzag
+- **P-piece**: P-shaped
+- **F-piece**: F-shaped
+- **Y-piece**: Y-shaped
+- And more unique 5-block configurations
+
+### Game Mechanics
+
+- **Precise Physics**: Accurate collision detection and rotation system
+- **Line Clearing**: Multi-line clears with cascading effects
+- **Level Progression**: Increasing difficulty with faster fall speeds
+- **Scoring System**: Points for placement, line clears, and soft/hard drops
+- **Smooth Animations**: Professional countdown and transition effects
 
 ## Controls
 
@@ -31,178 +58,145 @@ A complete Tetris implementation in C99 using SDL2, following modular game engin
 ## Requirements
 
 - **C Compiler**: GCC with C99 support
-- **SDL2**: Development libraries and headers
+- **SDL2**: Version 2.0+ with development headers
+- **SDL2_mixer**: For audio support
 - **Make**: Build system
 
 ### Installing Dependencies
 
+Use the automatic installation target in the Makefile:
+
+```bash
+# Install dependencies automatically (detects your platform)
+make install
+```
+
+**Manual Installation:**
+
 #### macOS (Homebrew)
 ```bash
-brew install sdl2
+brew install sdl2 sdl2_image sdl2_mixer sdl2_ttf
 ```
 
 #### Ubuntu/Debian
 ```bash
-sudo apt-get install libsdl2-dev
+sudo apt-get update
+sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
 ```
 
-#### Arch Linux
-```bash
-sudo pacman -S sdl2
-```
-
-## Building
+## Building & Running
 
 ### Quick Start
 ```bash
-# Install dependencies (macOS)
-make install-deps
-
-# Build and run
-make run
+# Clone and build
+git clone https://github.com/andrealaforgia/blocktris.git
+cd blocktris
+make install  # Install dependencies
+make run      # Build and run the game
 ```
 
-### Build Targets
-
+### Available Targets
 ```bash
-# Build release version
+# Build the game
 make
 
-# Build debug version
-make debug
+# Install system dependencies
+make install
+
+# Run the game (builds automatically if needed)
+make run
+
+# Run test suite
+make test
 
 # Clean build artifacts
 make clean
 
-# Run release version
-make run
-
-# Run debug version
-make run-debug
-
-# Memory leak checking (requires valgrind)
-make memcheck
-
-# Show help
-make help
+# Code quality tools
+make lint     # Run cppcheck linter
+make format   # Format code with clang-format
 ```
 
-## Project Structure
+## Project Architecture
 
 ```
-tetris/
-├── include/
-│   └── tetris.h           # Main header with all declarations
-├── src/
-│   ├── main.c             # Entry point and SDL initialization
-│   ├── engine.c           # Core game engine and loop
-│   ├── tetromino.c        # Piece definitions and logic
-│   ├── board.c            # Game board management
-│   ├── input.c            # Input handling system
-│   └── utils.c            # Utility functions
-├── build/                 # Build output directory
-│   ├── obj/              # Object files
-│   └── tetris            # Executable
-├── Makefile              # Build configuration
-└── README.md             # This file
+blocktris/
+├── engine/                    # Core game engine
+│   └── core/                 # Engine components
+│       ├── graphics/         # Rendering system
+│       ├── audio/           # Audio management
+│       ├── input/           # Input handling
+│       ├── math/            # Math utilities
+│       ├── memory/          # Memory management
+│       └── utils/           # Utility functions
+├── game/                     # Game-specific code
+│   ├── assets/              # Game assets
+│   └── src/                 # Game source code
+│       ├── entities/        # Game entities
+│       ├── managers/        # Game managers
+│       ├── rendering/       # Game rendering
+│       ├── scoring/         # Scoring system
+│       └── stages/          # Game stages
+├── build/                   # Build output
+└── Makefile                 # Build configuration
 ```
 
-## Architecture
+## Technical Highlights
 
-The game follows C99 SDL2 engine architecture patterns:
+### Engine Architecture
+- **Modular Design**: Clean separation between engine and game code
+- **Component System**: Entity-component architecture for game objects
+- **State Management**: Robust game state and stage management
+- **Resource Management**: Efficient texture and audio loading
+- **Object Pooling**: Memory-efficient piece management
 
-- **Modular Design**: Separated concerns for rendering, input, game logic
-- **Component-Based Entities**: Tetromino pieces as simple structs
-- **State Management**: Clean separation of game states
-- **Memory Management**: Stack allocation and efficient data structures
-- **Event-Driven Input**: SDL2 event handling with key repeat logic
+### Graphics System
+- **SDL2 Rendering**: Hardware-accelerated 2D graphics
+- **Bitmap Fonts**: Custom arcade-style font rendering
+- **Animation System**: Smooth transitions and effects
+- **Responsive Design**: Automatic screen scaling and centering
 
-### Key Components
-
-1. **Game Engine** (`engine.c`): Main loop, state management, timing
-2. **Tetromino System** (`tetromino.c`): Piece definitions, rotation, movement
-3. **Board Management** (`board.c`): Grid logic, collision detection, line clearing
-4. **Input System** (`input.c`): Key handling with repeat support
-5. **Rendering**: Direct SDL2 calls for line-based graphics
+### Performance Features
+- **60 FPS Target**: Consistent frame rate with delta timing
+- **Memory Efficiency**: Stack allocation and object pooling
+- **Optimized Rendering**: Minimal draw calls and state changes
+- **Profiling Ready**: Debug builds with performance metrics
 
 ## Code Quality
 
-- **Standards Compliance**: Strict C99 with `-Wall -Wextra -pedantic-errors`
-- **Documentation**: Doxygen-style comments for all public functions
-- **Error Handling**: Defensive programming with null pointer checks
-- **Performance**: Optimized for smooth 60 FPS gameplay
-
-## Gameplay Features
-
-### Tetromino Pieces
-
-All 7 standard pieces with proper colors:
-- **I-piece**: Cyan (4-block line)
-- **O-piece**: Yellow (2×2 square)  
-- **T-piece**: Purple (T-shaped)
-- **S-piece**: Green (S-shaped)
-- **Z-piece**: Red (Z-shaped)
-- **J-piece**: Blue (L-shaped, left)
-- **L-piece**: Orange (L-shaped, right)
-
-### Game Mechanics
-
-- **Piece Movement**: Smooth left/right movement with collision detection
-- **Rotation**: Clockwise and counter-clockwise with wall kick validation
-- **Line Clearing**: Automatic detection and clearing of completed lines
-- **Gravity**: Configurable piece falling with timing control
-- **Hard Drop**: Instant piece placement with space bar
-
-## Troubleshooting
-
-### Build Issues
-
-**SDL2 not found**:
-```bash
-# Verify SDL2 installation
-sdl2-config --version
-sdl2-config --cflags
-sdl2-config --libs
-```
-
-**Compilation errors**:
-```bash
-# Clean and rebuild
-make clean
-make debug
-```
-
-### Runtime Issues
-
-**No display**:
-- Ensure display server is running
-- Check SDL2 video driver support
-- Try different display modes
-
-**Performance issues**:
-- Use release build: `make run`
-- Check system resources
-- Verify hardware acceleration
+- **Standards**: Strict C99 compliance with `-Wall -Wextra -pedantic-errors`
+- **Documentation**: Comprehensive inline documentation
+- **Testing**: Defensive programming with extensive error checking
+- **Modularity**: Clean interfaces and minimal dependencies
 
 ## Development
 
-### Adding Features
+### Adding New Features
 
-The modular architecture makes it easy to extend:
+1. **New Piece Types**: Add to `piece_type_t` enum and define in piece data
+2. **Game Modes**: Implement new stages following existing patterns
+3. **Visual Effects**: Extend rendering system in graphics modules
+4. **Audio**: Add sound effects using SDL2_mixer integration
 
-1. **New Game States**: Add to `game_state_t` enum and handle in engine
-2. **Enhanced Graphics**: Extend rendering functions in respective modules  
-3. **Audio**: Add SDL2_mixer integration
-4. **Menu System**: Implement in separate module following existing patterns
+### Code Style Guide
 
-### Code Style
+- **Naming**: `snake_case` for functions, `UPPER_CASE` for constants
+- **Structures**: `typedef struct { ... } name_t` format
+- **Headers**: Include guards and forward declarations
+- **Comments**: Doxygen-style documentation
 
-- **Functions**: `snake_case` naming
-- **Constants**: `UPPER_CASE` naming  
-- **Structs**: `typedef struct { ... } name_t` format
-- **Headers**: Include guards, forward declarations
-- **Documentation**: Doxygen-style comments
+## Contributing
+
+This project serves as both a playable game and a learning resource for:
+- C99 game development
+- SDL2 engine architecture  
+- Memory-efficient game design
+- Cross-platform development
 
 ## License
 
-This project is provided as a learning example and game template. Feel free to use, modify, and distribute according to your needs.
+Open source project provided as educational material. Feel free to use, modify, and learn from the codebase.
+
+---
+
+**Blocktris** - Where classic puzzle gaming meets modern code architecture.

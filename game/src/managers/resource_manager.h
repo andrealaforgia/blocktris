@@ -1,6 +1,6 @@
 /**
  * @file resource_manager.h
- * @brief Coordinated Tetris game resource loading and cleanup
+ * @brief Coordinated BlockTris game resource loading and cleanup
  *
  * Orchestrates loading and freeing of all game assets using focused
  * resource loading modules for textures, fonts, and audio.

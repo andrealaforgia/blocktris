@@ -1,11 +1,11 @@
 /**
- * @file tetris_renderer.c
- * @brief Tetris game rendering system implementation
+ * @file blocktris_renderer.c
+ * @brief BlockTris game rendering system implementation
  */
 
-#include "tetris_renderer.h"
+#include "blocktris_renderer.h"
 #include "drawing_primitives.h"
-#include "tetris_collision.h"
+#include "blocktris_collision.h"
 #include "constants.h"
 #include "clock.h"
 #include "frame.h"
@@ -22,12 +22,12 @@ static const color_t GRID_COLOR = GRAY(64); // Dark gray grid
 static const int GHOST_ALPHA = 128; // Semi-transparent ghost piece
 static const color_t UI_BOX_COLOR = GRAY(64); // Semi-transparent dark gray for UI boxes
 
-bool tetris_renderer_init(const graphics_context_t *graphics_context) {
+bool blocktris_renderer_init(const graphics_context_t *graphics_context) {
     (void)graphics_context; // Not used for basic renderer
     return true;
 }
 
-void tetris_renderer_render_game(const game_t *game, const graphics_context_t *graphics_context) {
+void blocktris_renderer_render_game(const game_t *game, const graphics_context_t *graphics_context) {
     if (!game || !graphics_context) {
         return;
     }
@@ -36,48 +36,48 @@ void tetris_renderer_render_game(const game_t *game, const graphics_context_t *g
     clear_frame((graphics_context_t*)graphics_context);
     
     // Render background image
-    tetris_renderer_render_background(game, graphics_context);
+    blocktris_renderer_render_background(game, graphics_context);
     
     // Render game board and border
-    tetris_renderer_render_board(game, graphics_context);
+    blocktris_renderer_render_board(game, graphics_context);
     
     // Render placed pieces
-    tetris_renderer_render_placed_pieces(&game->board, graphics_context);
+    blocktris_renderer_render_placed_pieces(&game->board, graphics_context);
     
     // Render line clear effect if active
     if (game->line_clear_active) {
-        tetris_renderer_render_line_clear_effect(game, graphics_context);
+        blocktris_renderer_render_line_clear_effect(game, graphics_context);
     }
     
     // Render current piece if active
     if (game->current_piece_type != PIECE_EMPTY) {
-        tetris_renderer_render_ghost_piece(game, graphics_context);
-        tetris_renderer_render_current_piece(game, graphics_context);
+        blocktris_renderer_render_ghost_piece(game, graphics_context);
+        blocktris_renderer_render_current_piece(game, graphics_context);
     }
     
     // Render next piece preview
-    tetris_renderer_render_next_piece(game, graphics_context);
+    blocktris_renderer_render_next_piece(game, graphics_context);
     
     // Render UI elements
-    tetris_renderer_render_ui(game, graphics_context);
+    blocktris_renderer_render_ui(game, graphics_context);
     
     // Render countdown if active
     if (game->show_countdown) {
-        tetris_renderer_render_countdown(game, graphics_context);
+        blocktris_renderer_render_countdown(game, graphics_context);
     }
 }
 
-void tetris_renderer_render_board(const game_t *game, const graphics_context_t *graphics_context) {
+void blocktris_renderer_render_board(const game_t *game, const graphics_context_t *graphics_context) {
     (void)game; // Board rendering doesn't need game state
     
     // Render semi-transparent background for playfield
-    tetris_renderer_render_playfield_background(graphics_context);
+    blocktris_renderer_render_playfield_background(graphics_context);
     
-    tetris_renderer_render_board_border(graphics_context);
-    tetris_renderer_render_board_grid(graphics_context);
+    blocktris_renderer_render_board_border(graphics_context);
+    blocktris_renderer_render_board_grid(graphics_context);
 }
 
-void tetris_renderer_render_board_border(const graphics_context_t *graphics_context) {
+void blocktris_renderer_render_board_border(const graphics_context_t *graphics_context) {
     if (!graphics_context) {
         return;
     }
@@ -111,7 +111,7 @@ void tetris_renderer_render_board_border(const graphics_context_t *graphics_cont
               BORDER_COLOR);
 }
 
-void tetris_renderer_render_board_grid(const graphics_context_t *graphics_context) {
+void blocktris_renderer_render_board_grid(const graphics_context_t *graphics_context) {
     if (!graphics_context) {
         return;
     }
@@ -135,7 +135,7 @@ void tetris_renderer_render_board_grid(const graphics_context_t *graphics_contex
     }
 }
 
-void tetris_renderer_render_placed_pieces(const game_board_t *board, 
+void blocktris_renderer_render_placed_pieces(const game_board_t *board, 
                                          const graphics_context_t *graphics_context) {
     if (!board || !graphics_context) {
         return;
@@ -145,40 +145,40 @@ void tetris_renderer_render_placed_pieces(const game_board_t *board,
         for (int x = 0; x < BOARD_WIDTH; x++) {
             if (game_board_is_cell_filled(board, x, y)) {
                 int screen_x, screen_y;
-                tetris_renderer_board_to_screen(x, y, &screen_x, &screen_y);
+                blocktris_renderer_board_to_screen(x, y, &screen_x, &screen_y);
                 
                 color_t cell_color = game_board_get_cell_color(board, x, y);
                 color_t border_color = COLOR(255, 255, 255); // White border
                 
-                tetris_renderer_render_cell(screen_x, screen_y, CELL_SIZE, 
+                blocktris_renderer_render_cell(screen_x, screen_y, CELL_SIZE, 
                                            cell_color, border_color, graphics_context);
             }
         }
     }
 }
 
-void tetris_renderer_render_current_piece(const game_t *game, 
+void blocktris_renderer_render_current_piece(const game_t *game, 
                                          const graphics_context_t *graphics_context) {
     if (!game || !graphics_context || game->current_piece_type == PIECE_EMPTY) {
         return;
     }
     
-    color_t piece_color = tetris_piece_get_color(game->current_piece_type);
+    color_t piece_color = blocktris_piece_get_color(game->current_piece_type);
     color_t border_color = COLOR(255, 255, 255); // White border
     
     // Render each cell of the piece
     for (int py = 0; py < PIECE_SIZE; py++) {
         for (int px = 0; px < PIECE_SIZE; px++) {
-            if (tetris_piece_is_cell_filled(game->current_piece_type, 
+            if (blocktris_piece_is_cell_filled(game->current_piece_type, 
                                            game->current_piece_rotation, px, py)) {
                 int board_x = game->current_piece_x + px;
                 int board_y = game->current_piece_y + py;
                 
                 if (game_board_is_position_valid(board_x, board_y)) {
                     int screen_x, screen_y;
-                    tetris_renderer_board_to_screen(board_x, board_y, &screen_x, &screen_y);
+                    blocktris_renderer_board_to_screen(board_x, board_y, &screen_x, &screen_y);
                     
-                    tetris_renderer_render_cell(screen_x, screen_y, CELL_SIZE, 
+                    blocktris_renderer_render_cell(screen_x, screen_y, CELL_SIZE, 
                                                piece_color, border_color, graphics_context);
                 }
             }
@@ -186,14 +186,14 @@ void tetris_renderer_render_current_piece(const game_t *game,
     }
 }
 
-void tetris_renderer_render_ghost_piece(const game_t *game, 
+void blocktris_renderer_render_ghost_piece(const game_t *game, 
                                        const graphics_context_t *graphics_context) {
     if (!game || !graphics_context || game->current_piece_type == PIECE_EMPTY) {
         return;
     }
     
     // Find where the piece would land
-    int ghost_y = tetris_collision_find_drop_position(&game->board, game->current_piece_type,
+    int ghost_y = blocktris_collision_find_drop_position(&game->board, game->current_piece_type,
                                                      game->current_piece_rotation,
                                                      game->current_piece_x, game->current_piece_y);
     
@@ -207,14 +207,14 @@ void tetris_renderer_render_ghost_piece(const game_t *game,
     // Render each cell of the ghost piece as white outline only
     for (int py = 0; py < PIECE_SIZE; py++) {
         for (int px = 0; px < PIECE_SIZE; px++) {
-            if (tetris_piece_is_cell_filled(game->current_piece_type, 
+            if (blocktris_piece_is_cell_filled(game->current_piece_type, 
                                            game->current_piece_rotation, px, py)) {
                 int board_x = game->current_piece_x + px;
                 int board_y_ghost = ghost_y + py;
                 
                 if (game_board_is_position_valid(board_x, board_y_ghost)) {
                     int screen_x, screen_y;
-                    tetris_renderer_board_to_screen(board_x, board_y_ghost, &screen_x, &screen_y);
+                    blocktris_renderer_board_to_screen(board_x, board_y_ghost, &screen_x, &screen_y);
                     
                     // Draw only the white border outline (no fill)
                     draw_line((graphics_context_t*)graphics_context, 
@@ -231,14 +231,14 @@ void tetris_renderer_render_ghost_piece(const game_t *game,
     }
 }
 
-void tetris_renderer_render_next_piece(const game_t *game, 
+void blocktris_renderer_render_next_piece(const game_t *game, 
                                       const graphics_context_t *graphics_context) {
     if (!game || !graphics_context || game->next_piece_type == PIECE_EMPTY) {
         return;
     }
     
     // Render semi-transparent background for next piece box
-    tetris_renderer_render_next_piece_background(graphics_context);
+    blocktris_renderer_render_next_piece_background(graphics_context);
     
     // Draw blue border around next piece area
     color_t border_color = COLOR(0, 100, 255); // Blue border
@@ -273,14 +273,14 @@ void tetris_renderer_render_next_piece(const game_t *game,
     int piece_x = NEXT_PIECE_X + (NEXT_PIECE_SIZE - piece_cell_size * PIECE_SIZE) / 2;
     int piece_y = NEXT_PIECE_Y + (NEXT_PIECE_SIZE - piece_cell_size * PIECE_SIZE) / 2;
     
-    color_t piece_color = tetris_piece_get_color(game->next_piece_type);
+    color_t piece_color = blocktris_piece_get_color(game->next_piece_type);
     
-    tetris_renderer_render_piece_at_position(game->next_piece_type, 0,
+    blocktris_renderer_render_piece_at_position(game->next_piece_type, 0,
                                             piece_x, piece_y, piece_cell_size,
                                             piece_color, graphics_context);
 }
 
-void tetris_renderer_render_piece_at_position(piece_type_t piece_type, int rotation,
+void blocktris_renderer_render_piece_at_position(piece_type_t piece_type, int rotation,
                                              int x, int y, int cell_size, color_t color,
                                              const graphics_context_t *graphics_context) {
     if (!graphics_context) {
@@ -291,18 +291,18 @@ void tetris_renderer_render_piece_at_position(piece_type_t piece_type, int rotat
     
     for (int py = 0; py < PIECE_SIZE; py++) {
         for (int px = 0; px < PIECE_SIZE; px++) {
-            if (tetris_piece_is_cell_filled(piece_type, rotation, px, py)) {
+            if (blocktris_piece_is_cell_filled(piece_type, rotation, px, py)) {
                 int cell_x = x + px * cell_size;
                 int cell_y = y + py * cell_size;
                 
-                tetris_renderer_render_cell(cell_x, cell_y, cell_size, 
+                blocktris_renderer_render_cell(cell_x, cell_y, cell_size, 
                                            color, border_color, graphics_context);
             }
         }
     }
 }
 
-void tetris_renderer_render_cell(int x, int y, int size, color_t fill_color, 
+void blocktris_renderer_render_cell(int x, int y, int size, color_t fill_color, 
                                 color_t border_color, const graphics_context_t *graphics_context) {
     if (!graphics_context) {
         return;
@@ -324,13 +324,13 @@ void tetris_renderer_render_cell(int x, int y, int size, color_t fill_color,
     draw_line((graphics_context_t*)graphics_context, x, y + size, x, y, border_color); // Left
 }
 
-void tetris_renderer_render_ui(const game_t *game, const graphics_context_t *graphics_context) {
+void blocktris_renderer_render_ui(const game_t *game, const graphics_context_t *graphics_context) {
     if (!game || !graphics_context) {
         return;
     }
     
     // Render semi-transparent background for score box
-    tetris_renderer_render_score_background(graphics_context);
+    blocktris_renderer_render_score_background(graphics_context);
     
     // Render score in a bordered box
     color_t border_color = COLOR(255, 255, 255); // White border
@@ -362,7 +362,7 @@ void tetris_renderer_render_ui(const game_t *game, const graphics_context_t *gra
                              score_text, SCORE_X + 10, SCORE_Y + 35, FONT_COLOR_WHITE, 2);
 }
 
-void tetris_renderer_render_line_clear_effect(const game_t *game, 
+void blocktris_renderer_render_line_clear_effect(const game_t *game, 
                                              const graphics_context_t *graphics_context) {
     if (!game || !graphics_context || !game->line_clear_active) {
         return;
@@ -384,7 +384,7 @@ void tetris_renderer_render_line_clear_effect(const game_t *game,
             int line = game->lines_to_clear[i];
             if (line >= 0 && line < BOARD_HEIGHT) {
                 int screen_x, screen_y;
-                tetris_renderer_board_to_screen(0, line, &screen_x, &screen_y);
+                blocktris_renderer_board_to_screen(0, line, &screen_x, &screen_y);
                 
                 // Draw line across the entire width
                 draw_thick_line((graphics_context_t*)graphics_context,
@@ -396,7 +396,7 @@ void tetris_renderer_render_line_clear_effect(const game_t *game,
     }
 }
 
-void tetris_renderer_board_to_screen(int board_x, int board_y, int *screen_x, int *screen_y) {
+void blocktris_renderer_board_to_screen(int board_x, int board_y, int *screen_x, int *screen_y) {
     if (screen_x) {
         *screen_x = BOARD_OFFSET_X + board_x * CELL_SIZE;
     }
@@ -405,7 +405,7 @@ void tetris_renderer_board_to_screen(int board_x, int board_y, int *screen_x, in
     }
 }
 
-color_t tetris_renderer_get_alpha_color(color_t base_color, int alpha) {
+color_t blocktris_renderer_get_alpha_color(color_t base_color, int alpha) {
     // Since the color system doesn't support alpha, create a dimmed version
     // by reducing the intensity of the color based on alpha value
     int r = R(base_color);
@@ -421,7 +421,7 @@ color_t tetris_renderer_get_alpha_color(color_t base_color, int alpha) {
 }
 
 
-void tetris_renderer_render_background(const game_t *game, const graphics_context_t *graphics_context) {
+void blocktris_renderer_render_background(const game_t *game, const graphics_context_t *graphics_context) {
     if (!game || !graphics_context || !game->background_texture.texture) {
         return;
     }
@@ -433,7 +433,7 @@ void tetris_renderer_render_background(const game_t *game, const graphics_contex
     render_sprite((graphics_context_ptr)graphics_context, (texture_ptr)&game->background_texture, NULL, &dst_rect);
 }
 
-void tetris_renderer_render_playfield_background(const graphics_context_t *graphics_context) {
+void blocktris_renderer_render_playfield_background(const graphics_context_t *graphics_context) {
     if (!graphics_context) {
         return;
     }
@@ -452,7 +452,7 @@ void tetris_renderer_render_playfield_background(const graphics_context_t *graph
     }
 }
 
-void tetris_renderer_render_next_piece_background(const graphics_context_t *graphics_context) {
+void blocktris_renderer_render_next_piece_background(const graphics_context_t *graphics_context) {
     if (!graphics_context) {
         return;
     }
@@ -471,7 +471,7 @@ void tetris_renderer_render_next_piece_background(const graphics_context_t *grap
     }
 }
 
-void tetris_renderer_render_score_background(const graphics_context_t *graphics_context) {
+void blocktris_renderer_render_score_background(const graphics_context_t *graphics_context) {
     if (!graphics_context) {
         return;
     }
@@ -490,7 +490,7 @@ void tetris_renderer_render_score_background(const graphics_context_t *graphics_
     }
 }
 
-void tetris_renderer_render_countdown(const game_t *game, const graphics_context_t *graphics_context) {
+void blocktris_renderer_render_countdown(const game_t *game, const graphics_context_t *graphics_context) {
     if (!game || !graphics_context || !game->show_countdown) {
         return;
     }

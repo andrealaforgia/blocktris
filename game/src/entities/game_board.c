@@ -1,10 +1,10 @@
 /**
  * @file game_board.c
- * @brief Tetris game board management implementation
+ * @brief BlockTris game board management implementation
  */
 
 #include "game_board.h"
-#include "tetris_piece.h"
+#include "blocktris_piece.h"
 #include <string.h>
 
 void game_board_init(game_board_t *board) {
@@ -147,12 +147,12 @@ void game_board_place_piece(game_board_t *board, piece_type_t piece_type,
         return;
     }
     
-    color_t piece_color = tetris_piece_get_color(piece_type);
+    color_t piece_color = blocktris_piece_get_color(piece_type);
     
     // Place each filled cell of the piece on the board
     for (int py = 0; py < PIECE_SIZE; py++) {
         for (int px = 0; px < PIECE_SIZE; px++) {
-            if (tetris_piece_is_cell_filled(piece_type, piece_rotation, px, py)) {
+            if (blocktris_piece_is_cell_filled(piece_type, piece_rotation, px, py)) {
                 int board_x = piece_x + px;
                 int board_y = piece_y + py;
                 

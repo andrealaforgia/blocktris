@@ -27,6 +27,8 @@ typedef struct {
     stage_ptr instance;
 } stage_registry_entry_t;
 
+typedef stage_registry_entry_t *stage_registry_entry_ptr;
+
 /**
  * @brief Stage director context using State pattern
  */

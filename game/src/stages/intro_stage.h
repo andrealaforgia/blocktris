@@ -5,8 +5,8 @@
  * Handles the intro screen showing the game title and start prompt.
  */
 
-#ifndef TETRIS_INTRO_STAGE_H_
-#define TETRIS_INTRO_STAGE_H_
+#ifndef BLOCKTRIS_INTRO_STAGE_H_
+#define BLOCKTRIS_INTRO_STAGE_H_
 
 #include "stage.h"
 
@@ -18,6 +18,8 @@ typedef struct {
     timestamp_ms_t start_time;
     bool start_requested;
 } intro_stage_state_t;
+
+typedef intro_stage_state_t *intro_stage_state_ptr;
 
 /**
  * Initialize intro stage
@@ -34,4 +36,4 @@ game_stage_action_t intro_stage_update(stage_t *stage);
  */
 void intro_stage_cleanup(stage_t *stage);
 
-#endif // TETRIS_INTRO_STAGE_H_
+#endif // BLOCKTRIS_INTRO_STAGE_H_

@@ -1,13 +1,13 @@
 /**
  * @file game.h
- * @brief Core Tetris game state and lifecycle management
+ * @brief Core BlockTris game state and lifecycle management
  *
  * Provides the central game structure and lifecycle functions (init/terminate).
  * This is the main entry point for game initialization and cleanup.
  */
 
-#ifndef TETRIS_GAME_H_
-#define TETRIS_GAME_H_
+#ifndef BLOCKTRIS_GAME_H_
+#define BLOCKTRIS_GAME_H_
 
 #include "types.h"
 #include <stdbool.h>
@@ -22,7 +22,7 @@
 #include "texture.h"
 
 // Entity modules
-#include "tetris_piece.h"
+#include "blocktris_piece.h"
 #include "game_board.h"
 
 // Forward declarations for stage system
@@ -48,7 +48,7 @@ typedef enum {
 } game_screen_t;
 
 /**
- * Main Tetris game state structure
+ * Main BlockTris game state structure
  * Contains all game data including graphics, audio, entities, and game state
  */
 typedef struct {
@@ -105,7 +105,7 @@ typedef struct {
 typedef game_t *game_ptr;
 
 /**
- * Initialize the Tetris game
+ * Initialize the BlockTris game
  * Sets up graphics, audio, loads resources, and initializes game state
  *
  * @param game Pointer to game structure to initialize
@@ -135,4 +135,4 @@ void game_reset(game_t *game);
  */
 void handle_events(event_system_t *event_system);
 
-#endif // TETRIS_GAME_H_
+#endif // BLOCKTRIS_GAME_H_

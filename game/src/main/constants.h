@@ -1,8 +1,8 @@
 /**
  * @file constants.h
- * @brief Global Tetris game constants and configuration values
+ * @brief Global BlockTris game constants and configuration values
  *
- * Defines all the core constants used throughout the Tetris game including
+ * Defines all the core constants used throughout the BlockTris game including
  * screen dimensions, game board dimensions, piece colors, and timing.
  */
 
@@ -12,7 +12,7 @@
 // Screen height scale factor (window will be 90% of actual screen height)
 #define SCREEN_HEIGHT_SCALE 0.9
 
-// Tetris board dimensions (this implementation uses 20x30)
+// BlockTris board dimensions (this implementation uses 20x30)
 #define BOARD_WIDTH 20
 #define BOARD_HEIGHT 30
 

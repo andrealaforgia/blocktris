@@ -1,25 +1,25 @@
 /**
- * @file tetris_renderer.h
- * @brief Tetris game rendering system
+ * @file blocktris_renderer.h
+ * @brief BlockTris game rendering system
  *
- * Handles all rendering operations for the Tetris game including
+ * Handles all rendering operations for the BlockTris game including
  * game board, pieces, UI elements, and visual effects.
  */
 
-#ifndef TETRIS_RENDERER_H_
-#define TETRIS_RENDERER_H_
+#ifndef BLOCKTRIS_RENDERER_H_
+#define BLOCKTRIS_RENDERER_H_
 
 #include "game.h"
 #include "graphics.h"
 #include "color.h"
 
 /**
- * Initialize the Tetris renderer
+ * Initialize the BlockTris renderer
  *
  * @param graphics_context Pointer to graphics context
  * @return true if initialization successful, false otherwise
  */
-bool tetris_renderer_init(const graphics_context_t *graphics_context);
+bool blocktris_renderer_init(const graphics_context_t *graphics_context);
 
 /**
  * Render the entire game
@@ -27,7 +27,7 @@ bool tetris_renderer_init(const graphics_context_t *graphics_context);
  * @param game Pointer to game state
  * @param graphics_context Pointer to graphics context
  */
-void tetris_renderer_render_game(const game_t *game, const graphics_context_t *graphics_context);
+void blocktris_renderer_render_game(const game_t *game, const graphics_context_t *graphics_context);
 
 /**
  * Render the game board with border
@@ -35,21 +35,21 @@ void tetris_renderer_render_game(const game_t *game, const graphics_context_t *g
  * @param game Pointer to game state
  * @param graphics_context Pointer to graphics context
  */
-void tetris_renderer_render_board(const game_t *game, const graphics_context_t *graphics_context);
+void blocktris_renderer_render_board(const game_t *game, const graphics_context_t *graphics_context);
 
 /**
  * Render the game board border
  *
  * @param graphics_context Pointer to graphics context
  */
-void tetris_renderer_render_board_border(const graphics_context_t *graphics_context);
+void blocktris_renderer_render_board_border(const graphics_context_t *graphics_context);
 
 /**
  * Render the game board grid
  *
  * @param graphics_context Pointer to graphics context
  */
-void tetris_renderer_render_board_grid(const graphics_context_t *graphics_context);
+void blocktris_renderer_render_board_grid(const graphics_context_t *graphics_context);
 
 /**
  * Render placed pieces on the board
@@ -57,7 +57,7 @@ void tetris_renderer_render_board_grid(const graphics_context_t *graphics_contex
  * @param board Pointer to game board
  * @param graphics_context Pointer to graphics context
  */
-void tetris_renderer_render_placed_pieces(const game_board_t *board, 
+void blocktris_renderer_render_placed_pieces(const game_board_t *board, 
                                          const graphics_context_t *graphics_context);
 
 /**
@@ -66,7 +66,7 @@ void tetris_renderer_render_placed_pieces(const game_board_t *board,
  * @param game Pointer to game state
  * @param graphics_context Pointer to graphics context
  */
-void tetris_renderer_render_current_piece(const game_t *game, 
+void blocktris_renderer_render_current_piece(const game_t *game, 
                                          const graphics_context_t *graphics_context);
 
 /**
@@ -75,7 +75,7 @@ void tetris_renderer_render_current_piece(const game_t *game,
  * @param game Pointer to game state
  * @param graphics_context Pointer to graphics context
  */
-void tetris_renderer_render_ghost_piece(const game_t *game, 
+void blocktris_renderer_render_ghost_piece(const game_t *game, 
                                        const graphics_context_t *graphics_context);
 
 /**
@@ -84,7 +84,7 @@ void tetris_renderer_render_ghost_piece(const game_t *game,
  * @param game Pointer to game state
  * @param graphics_context Pointer to graphics context
  */
-void tetris_renderer_render_next_piece(const game_t *game, 
+void blocktris_renderer_render_next_piece(const game_t *game, 
                                       const graphics_context_t *graphics_context);
 
 /**
@@ -98,7 +98,7 @@ void tetris_renderer_render_next_piece(const game_t *game,
  * @param color Color to render the piece
  * @param graphics_context Pointer to graphics context
  */
-void tetris_renderer_render_piece_at_position(piece_type_t piece_type, int rotation,
+void blocktris_renderer_render_piece_at_position(piece_type_t piece_type, int rotation,
                                              int x, int y, int cell_size, color_t color,
                                              const graphics_context_t *graphics_context);
 
@@ -112,7 +112,7 @@ void tetris_renderer_render_piece_at_position(piece_type_t piece_type, int rotat
  * @param border_color Border color
  * @param graphics_context Pointer to graphics context
  */
-void tetris_renderer_render_cell(int x, int y, int size, color_t fill_color, 
+void blocktris_renderer_render_cell(int x, int y, int size, color_t fill_color, 
                                 color_t border_color, const graphics_context_t *graphics_context);
 
 /**
@@ -121,7 +121,7 @@ void tetris_renderer_render_cell(int x, int y, int size, color_t fill_color,
  * @param game Pointer to game state
  * @param graphics_context Pointer to graphics context
  */
-void tetris_renderer_render_ui(const game_t *game, const graphics_context_t *graphics_context);
+void blocktris_renderer_render_ui(const game_t *game, const graphics_context_t *graphics_context);
 
 /**
  * Render line clear effect
@@ -129,7 +129,7 @@ void tetris_renderer_render_ui(const game_t *game, const graphics_context_t *gra
  * @param game Pointer to game state
  * @param graphics_context Pointer to graphics context
  */
-void tetris_renderer_render_line_clear_effect(const game_t *game, 
+void blocktris_renderer_render_line_clear_effect(const game_t *game, 
                                              const graphics_context_t *graphics_context);
 
 /**
@@ -140,7 +140,7 @@ void tetris_renderer_render_line_clear_effect(const game_t *game,
  * @param screen_x Pointer to output screen x coordinate
  * @param screen_y Pointer to output screen y coordinate
  */
-void tetris_renderer_board_to_screen(int board_x, int board_y, int *screen_x, int *screen_y);
+void blocktris_renderer_board_to_screen(int board_x, int board_y, int *screen_x, int *screen_y);
 
 /**
  * Get color with alpha transparency
@@ -149,7 +149,7 @@ void tetris_renderer_board_to_screen(int board_x, int board_y, int *screen_x, in
  * @param alpha Alpha value (0-255)
  * @return Color with alpha applied
  */
-color_t tetris_renderer_get_alpha_color(color_t base_color, int alpha);
+color_t blocktris_renderer_get_alpha_color(color_t base_color, int alpha);
 
 /**
  * Render background image
@@ -157,28 +157,28 @@ color_t tetris_renderer_get_alpha_color(color_t base_color, int alpha);
  * @param game Pointer to game state
  * @param graphics_context Pointer to graphics context
  */
-void tetris_renderer_render_background(const game_t *game, const graphics_context_t *graphics_context);
+void blocktris_renderer_render_background(const game_t *game, const graphics_context_t *graphics_context);
 
 /**
  * Render semi-transparent background for playfield
  *
  * @param graphics_context Pointer to graphics context
  */
-void tetris_renderer_render_playfield_background(const graphics_context_t *graphics_context);
+void blocktris_renderer_render_playfield_background(const graphics_context_t *graphics_context);
 
 /**
  * Render semi-transparent background for next piece box
  *
  * @param graphics_context Pointer to graphics context
  */
-void tetris_renderer_render_next_piece_background(const graphics_context_t *graphics_context);
+void blocktris_renderer_render_next_piece_background(const graphics_context_t *graphics_context);
 
 /**
  * Render semi-transparent background for score box
  *
  * @param graphics_context Pointer to graphics context
  */
-void tetris_renderer_render_score_background(const graphics_context_t *graphics_context);
+void blocktris_renderer_render_score_background(const graphics_context_t *graphics_context);
 
 /**
  * Render countdown display before game starts (3, 2)
@@ -186,6 +186,6 @@ void tetris_renderer_render_score_background(const graphics_context_t *graphics_
  * @param game Pointer to game state
  * @param graphics_context Pointer to graphics context
  */
-void tetris_renderer_render_countdown(const game_t *game, const graphics_context_t *graphics_context);
+void blocktris_renderer_render_countdown(const game_t *game, const graphics_context_t *graphics_context);
 
-#endif // TETRIS_RENDERER_H_
+#endif // BLOCKTRIS_RENDERER_H_

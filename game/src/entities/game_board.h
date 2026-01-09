@@ -1,6 +1,6 @@
 /**
  * @file game_board.h
- * @brief Tetris game board management
+ * @brief BlockTris game board management
  *
  * Defines the game board structure and provides functions for
  * board management, line clearing, and piece placement.
@@ -28,6 +28,8 @@ typedef struct {
 typedef struct {
     board_cell_t cells[BOARD_HEIGHT][BOARD_WIDTH];
 } game_board_t;
+
+typedef game_board_t *game_board_ptr;
 
 /**
  * Initialize the game board

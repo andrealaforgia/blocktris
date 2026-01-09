@@ -1,20 +1,20 @@
 /**
- * @file tetris_controller.h
- * @brief Tetris game input controller
+ * @file blocktris_controller.h
+ * @brief BlockTris game input controller
  *
- * Handles input processing for Tetris game including piece movement,
+ * Handles input processing for BlockTris game including piece movement,
  * rotation, and special actions like hard drop and pause.
  */
 
-#ifndef TETRIS_CONTROLLER_H_
-#define TETRIS_CONTROLLER_H_
+#ifndef BLOCKTRIS_CONTROLLER_H_
+#define BLOCKTRIS_CONTROLLER_H_
 
 #include "game.h"
 #include "keyboard.h"
 #include <stdbool.h>
 
 /**
- * Tetris input controller state
+ * BlockTris input controller state
  */
 typedef struct {
     timestamp_ms_t last_move_time;
@@ -25,14 +25,16 @@ typedef struct {
     bool down_held;
     bool space_held;
     bool up_held;
-} tetris_controller_t;
+} blocktris_controller_t;
+
+typedef blocktris_controller_t *blocktris_controller_ptr;
 
 /**
- * Initialize the Tetris controller
+ * Initialize the BlockTris controller
  *
  * @param controller Pointer to controller to initialize
  */
-void tetris_controller_init(tetris_controller_t *controller);
+void blocktris_controller_init(blocktris_controller_t *controller);
 
 /**
  * Update the controller state and process input
@@ -41,7 +43,7 @@ void tetris_controller_init(tetris_controller_t *controller);
  * @param game Pointer to game state
  * @param keyboard Pointer to keyboard state
  */
-void tetris_controller_update(tetris_controller_t *controller, game_t *game, 
+void blocktris_controller_update(blocktris_controller_t *controller, game_t *game, 
                              keyboard_state_t *keyboard);
 
 /**
@@ -51,7 +53,7 @@ void tetris_controller_update(tetris_controller_t *controller, game_t *game,
  * @param game Pointer to game state
  * @param keyboard Pointer to keyboard state
  */
-void tetris_controller_handle_movement(tetris_controller_t *controller, game_t *game,
+void blocktris_controller_handle_movement(blocktris_controller_t *controller, game_t *game,
                                       keyboard_state_t *keyboard);
 
 /**
@@ -61,7 +63,7 @@ void tetris_controller_handle_movement(tetris_controller_t *controller, game_t *
  * @param game Pointer to game state
  * @param keyboard Pointer to keyboard state
  */
-void tetris_controller_handle_rotation(tetris_controller_t *controller, game_t *game,
+void blocktris_controller_handle_rotation(blocktris_controller_t *controller, game_t *game,
                                       keyboard_state_t *keyboard);
 
 /**
@@ -71,8 +73,8 @@ void tetris_controller_handle_rotation(tetris_controller_t *controller, game_t *
  * @param game Pointer to game state
  * @param keyboard Pointer to keyboard state
  */
-void tetris_controller_handle_soft_drop(tetris_controller_t *controller, game_t *game,
-                                       keyboard_state_t *keyboard);
+void blocktris_controller_handle_soft_drop(blocktris_controller_t *controller, game_t *game,
+                                       const keyboard_state_t *keyboard);
 
 /**
  * Handle hard drop input (space bar)
@@ -81,7 +83,7 @@ void tetris_controller_handle_soft_drop(tetris_controller_t *controller, game_t 
  * @param game Pointer to game state
  * @param keyboard Pointer to keyboard state
  */
-void tetris_controller_handle_hard_drop(tetris_controller_t *controller, game_t *game,
+void blocktris_controller_handle_hard_drop(blocktris_controller_t *controller, game_t *game,
                                        keyboard_state_t *keyboard);
 
 /**
@@ -92,7 +94,7 @@ void tetris_controller_handle_hard_drop(tetris_controller_t *controller, game_t 
  * @param dy Y offset
  * @return true if piece was moved, false if blocked
  */
-bool tetris_controller_move_piece(game_t *game, int dx, int dy);
+bool blocktris_controller_move_piece(game_t *game, int dx, int dy);
 
 /**
  * Attempt to rotate the current piece clockwise
@@ -100,7 +102,7 @@ bool tetris_controller_move_piece(game_t *game, int dx, int dy);
  * @param game Pointer to game state
  * @return true if piece was rotated, false if blocked
  */
-bool tetris_controller_rotate_piece_clockwise(game_t *game);
+bool blocktris_controller_rotate_piece_clockwise(game_t *game);
 
 /**
  * Attempt to rotate the current piece counter-clockwise
@@ -108,7 +110,7 @@ bool tetris_controller_rotate_piece_clockwise(game_t *game);
  * @param game Pointer to game state
  * @return true if piece was rotated, false if blocked
  */
-bool tetris_controller_rotate_piece_counter_clockwise(game_t *game);
+bool blocktris_controller_rotate_piece_counter_clockwise(game_t *game);
 
 /**
  * Perform hard drop (drop piece to bottom)
@@ -116,7 +118,7 @@ bool tetris_controller_rotate_piece_counter_clockwise(game_t *game);
  * @param game Pointer to game state
  * @return Number of lines dropped
  */
-int tetris_controller_hard_drop_piece(game_t *game);
+int blocktris_controller_hard_drop_piece(game_t *game);
 
 /**
  * Check if enough time has passed for repeated input
@@ -125,6 +127,6 @@ int tetris_controller_hard_drop_piece(game_t *game);
  * @param delay Delay between repeated inputs
  * @return true if enough time has passed
  */
-bool tetris_controller_can_repeat_input(timestamp_ms_t last_time, int delay);
+bool blocktris_controller_can_repeat_input(timestamp_ms_t last_time, int delay);
 
-#endif // TETRIS_CONTROLLER_H_
+#endif // BLOCKTRIS_CONTROLLER_H_

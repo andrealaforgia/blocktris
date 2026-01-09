@@ -1,9 +1,9 @@
 /**
- * @file tetris_collision.c
- * @brief Tetris collision detection system implementation
+ * @file blocktris_collision.c
+ * @brief BlockTris collision detection system implementation
  */
 
-#include "tetris_collision.h"
+#include "blocktris_collision.h"
 
 // Wall kick test offsets for different piece types and rotations
 // Standard SRS (Super Rotation System) wall kicks for most pieces
@@ -30,7 +30,7 @@ static const int WALL_KICK_OFFSETS_I[4][5][2] = {
     {{0, 0}, {1, 0}, {-2, 0}, {1, -2}, {-2, 1}}
 };
 
-bool tetris_collision_can_place_piece(const game_board_t *board, piece_type_t piece_type,
+bool blocktris_collision_can_place_piece(const game_board_t *board, piece_type_t piece_type,
                                      int piece_rotation, int piece_x, int piece_y) {
     if (!board) {
         return false;
@@ -39,7 +39,7 @@ bool tetris_collision_can_place_piece(const game_board_t *board, piece_type_t pi
     // Check each cell of the piece
     for (int py = 0; py < PIECE_SIZE; py++) {
         for (int px = 0; px < PIECE_SIZE; px++) {
-            if (tetris_piece_is_cell_filled(piece_type, piece_rotation, px, py)) {
+            if (blocktris_piece_is_cell_filled(piece_type, piece_rotation, px, py)) {
                 int board_x = piece_x + px;
                 int board_y = piece_y + py;
                 
@@ -60,34 +60,34 @@ bool tetris_collision_can_place_piece(const game_board_t *board, piece_type_t pi
     return true;
 }
 
-bool tetris_collision_can_move_piece(const game_board_t *board, piece_type_t piece_type,
+bool blocktris_collision_can_move_piece(const game_board_t *board, piece_type_t piece_type,
                                     int piece_rotation, int piece_x, int piece_y, 
                                     int dx, int dy) {
-    return tetris_collision_can_place_piece(board, piece_type, piece_rotation,
+    return blocktris_collision_can_place_piece(board, piece_type, piece_rotation,
                                            piece_x + dx, piece_y + dy);
 }
 
-bool tetris_collision_can_rotate_piece(const game_board_t *board, piece_type_t piece_type,
+bool blocktris_collision_can_rotate_piece(const game_board_t *board, piece_type_t piece_type,
                                       int current_rotation, int new_rotation,
                                       int piece_x, int piece_y) {
     (void)current_rotation; // Basic rotation test doesn't use current rotation
     
-    return tetris_collision_can_place_piece(board, piece_type, new_rotation,
+    return blocktris_collision_can_place_piece(board, piece_type, new_rotation,
                                            piece_x, piece_y);
 }
 
-bool tetris_collision_can_fall(const game_board_t *board, piece_type_t piece_type,
+bool blocktris_collision_can_fall(const game_board_t *board, piece_type_t piece_type,
                               int piece_rotation, int piece_x, int piece_y) {
-    return tetris_collision_can_move_piece(board, piece_type, piece_rotation,
+    return blocktris_collision_can_move_piece(board, piece_type, piece_rotation,
                                           piece_x, piece_y, 0, 1);
 }
 
-int tetris_collision_find_drop_position(const game_board_t *board, piece_type_t piece_type,
+int blocktris_collision_find_drop_position(const game_board_t *board, piece_type_t piece_type,
                                        int piece_rotation, int piece_x, int start_y) {
     int y = start_y;
     
     // Move down until we hit something
-    while (tetris_collision_can_place_piece(board, piece_type, piece_rotation, piece_x, y + 1)) {
+    while (blocktris_collision_can_place_piece(board, piece_type, piece_rotation, piece_x, y + 1)) {
         y++;
     }
     
@@ -96,10 +96,10 @@ int tetris_collision_find_drop_position(const game_board_t *board, piece_type_t 
 
 static bool test_wall_kick_position(const game_board_t *board, piece_type_t piece_type,
                                    int new_rotation, int test_x, int test_y) {
-    return tetris_collision_can_place_piece(board, piece_type, new_rotation, test_x, test_y);
+    return blocktris_collision_can_place_piece(board, piece_type, new_rotation, test_x, test_y);
 }
 
-bool tetris_collision_wall_kick_test(const game_board_t *board, piece_type_t piece_type,
+bool blocktris_collision_wall_kick_test(const game_board_t *board, piece_type_t piece_type,
                                     int current_rotation, int new_rotation,
                                     int *piece_x, int *piece_y) {
     if (!board || !piece_x || !piece_y) {
@@ -107,7 +107,7 @@ bool tetris_collision_wall_kick_test(const game_board_t *board, piece_type_t pie
     }
     
     // Check if piece can be placed in current position first
-    if (tetris_collision_can_place_piece(board, piece_type, new_rotation, *piece_x, *piece_y)) {
+    if (blocktris_collision_can_place_piece(board, piece_type, new_rotation, *piece_x, *piece_y)) {
         return true;
     }
     

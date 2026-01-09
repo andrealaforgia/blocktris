@@ -173,7 +173,7 @@ static const pentomino_def_t pentomino_defs[NUM_PIECE_TYPES] = {
 };
 
 const pentomino_def_t* get_pentomino_def(piece_type_t type) {
-    if (type >= NUM_PIECE_TYPES || type == PIECE_EMPTY) {
+    if (type >= NUM_PIECE_TYPES) {
         return NULL;
     }
     return &pentomino_defs[type];

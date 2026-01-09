@@ -4,12 +4,12 @@
  */
 
 #include "../test_framework.h"
-#include "../../game/src/entities/tetris_piece.h"
+#include "../../game/src/entities/blocktris_piece.h"
 #include "../../game/src/main/constants.h"
 
 // Helper function to count blocks in a piece shape
 static int count_blocks_in_shape(piece_type_t type, int rotation) {
-    const bool (*shape)[PIECE_SIZE] = tetris_piece_get_shape(type, rotation);
+    const bool (*shape)[PIECE_SIZE] = blocktris_piece_get_shape(type, rotation);
     if (!shape) return 0;
     
     int count = 0;
@@ -25,7 +25,7 @@ static int count_blocks_in_shape(piece_type_t type, int rotation) {
 
 // Helper function to print piece shape for debugging
 static void print_piece_shape(piece_type_t type, int rotation) {
-    const bool (*shape)[PIECE_SIZE] = tetris_piece_get_shape(type, rotation);
+    const bool (*shape)[PIECE_SIZE] = blocktris_piece_get_shape(type, rotation);
     if (!shape) {
         printf("NULL shape\n");
         return;
@@ -72,7 +72,7 @@ void test_piece_shapes_not_null(void) {
         if (piece_type == PIECE_EMPTY) continue;
         
         for (int rotation = 0; rotation < 4; rotation++) {
-            const bool (*shape)[PIECE_SIZE] = tetris_piece_get_shape((piece_type_t)piece_type, rotation);
+            const bool (*shape)[PIECE_SIZE] = blocktris_piece_get_shape((piece_type_t)piece_type, rotation);
             
             char test_msg[120];
             snprintf(test_msg, sizeof(test_msg), 
@@ -85,10 +85,10 @@ void test_piece_shapes_not_null(void) {
 
 // Test that invalid piece types return NULL
 void test_invalid_piece_types_return_null(void) {
-    const bool (*shape)[PIECE_SIZE] = tetris_piece_get_shape(PIECE_EMPTY, 0);
+    const bool (*shape)[PIECE_SIZE] = blocktris_piece_get_shape(PIECE_EMPTY, 0);
     TEST_ASSERT(shape == NULL, "PIECE_EMPTY returns NULL shape");
     
-    shape = tetris_piece_get_shape((piece_type_t)999, 0);
+    shape = blocktris_piece_get_shape((piece_type_t)999, 0);
     TEST_ASSERT(shape == NULL, "Invalid piece type returns NULL shape");
 }
 
@@ -99,9 +99,9 @@ void test_rotation_bounds(void) {
         if (piece_type == PIECE_EMPTY) continue;
         
         // Test that rotation values are normalized (modulo 4)
-        const bool (*shape0)[PIECE_SIZE] = tetris_piece_get_shape((piece_type_t)piece_type, 0);
-        const bool (*shape4)[PIECE_SIZE] = tetris_piece_get_shape((piece_type_t)piece_type, 4);
-        const bool (*shape8)[PIECE_SIZE] = tetris_piece_get_shape((piece_type_t)piece_type, 8);
+        const bool (*shape0)[PIECE_SIZE] = blocktris_piece_get_shape((piece_type_t)piece_type, 0);
+        const bool (*shape4)[PIECE_SIZE] = blocktris_piece_get_shape((piece_type_t)piece_type, 4);
+        const bool (*shape8)[PIECE_SIZE] = blocktris_piece_get_shape((piece_type_t)piece_type, 8);
         
         char test_msg[120];
         snprintf(test_msg, sizeof(test_msg), 
@@ -116,7 +116,7 @@ void test_rotation_bounds(void) {
 // Test specific pentomino shapes match basic expectations
 void test_piece_specific_shapes(void) {
     // Test PIECE_I (line) - should have blocks in a row when horizontal
-    const bool (*piece_i_rot0)[PIECE_SIZE] = tetris_piece_get_shape(PIECE_I, 0);
+    const bool (*piece_i_rot0)[PIECE_SIZE] = blocktris_piece_get_shape(PIECE_I, 0);
     if (piece_i_rot0) {
         // Count horizontal lines in each row
         int max_consecutive = 0;
@@ -137,7 +137,7 @@ void test_piece_specific_shapes(void) {
     }
     
     // Test PIECE_X (plus shape) - should have a center block with arms
-    const bool (*piece_x_rot0)[PIECE_SIZE] = tetris_piece_get_shape(PIECE_X, 0);
+    const bool (*piece_x_rot0)[PIECE_SIZE] = blocktris_piece_get_shape(PIECE_X, 0);
     if (piece_x_rot0) {
         // Find a block that has blocks in all 4 directions (center of plus)
         bool found_plus_center = false;
@@ -164,10 +164,10 @@ void test_rotations_are_different(void) {
         
         // Count how many different rotations this piece has
         int different_rotations = 0;
-        const bool (*rot0)[PIECE_SIZE] = tetris_piece_get_shape((piece_type_t)piece_type, 0);
+        const bool (*rot0)[PIECE_SIZE] = blocktris_piece_get_shape((piece_type_t)piece_type, 0);
         
         for (int r = 1; r < 4; r++) {
-            const bool (*rot_r)[PIECE_SIZE] = tetris_piece_get_shape((piece_type_t)piece_type, r);
+            const bool (*rot_r)[PIECE_SIZE] = blocktris_piece_get_shape((piece_type_t)piece_type, r);
             
             bool is_different = false;
             for (int y = 0; y < PIECE_SIZE && !is_different; y++) {
@@ -185,7 +185,8 @@ void test_rotations_are_different(void) {
         
         char test_msg[120];
         snprintf(test_msg, sizeof(test_msg), 
-                "Pentomino %d has valid rotation system", piece_type);
+                "Pentomino %d has valid rotation system (%d different rotations)", 
+                piece_type, different_rotations);
         
         // All pentominos should have at least some rotational behavior
         // Even symmetric pieces should have their rotations properly defined
@@ -194,23 +195,23 @@ void test_rotations_are_different(void) {
 }
 
 // Test function validation
-void test_tetris_piece_is_cell_filled(void) {
+void test_blocktris_piece_is_cell_filled(void) {
     // Test valid coordinates
-    bool result = tetris_piece_is_cell_filled(PIECE_I, 0, 1, 1);
-    TEST_ASSERT(result == true || result == false, "tetris_piece_is_cell_filled returns valid boolean");
+    bool result = blocktris_piece_is_cell_filled(PIECE_I, 0, 1, 1);
+    TEST_ASSERT(result == true || result == false, "blocktris_piece_is_cell_filled returns valid boolean");
     
     // Test invalid coordinates (should return false)
-    result = tetris_piece_is_cell_filled(PIECE_I, 0, -1, 0);
-    TEST_ASSERT(result == false, "tetris_piece_is_cell_filled returns false for negative x");
+    result = blocktris_piece_is_cell_filled(PIECE_I, 0, -1, 0);
+    TEST_ASSERT(result == false, "blocktris_piece_is_cell_filled returns false for negative x");
     
-    result = tetris_piece_is_cell_filled(PIECE_I, 0, 0, -1);
-    TEST_ASSERT(result == false, "tetris_piece_is_cell_filled returns false for negative y");
+    result = blocktris_piece_is_cell_filled(PIECE_I, 0, 0, -1);
+    TEST_ASSERT(result == false, "blocktris_piece_is_cell_filled returns false for negative y");
     
-    result = tetris_piece_is_cell_filled(PIECE_I, 0, PIECE_SIZE, 0);
-    TEST_ASSERT(result == false, "tetris_piece_is_cell_filled returns false for x >= PIECE_SIZE");
+    result = blocktris_piece_is_cell_filled(PIECE_I, 0, PIECE_SIZE, 0);
+    TEST_ASSERT(result == false, "blocktris_piece_is_cell_filled returns false for x >= PIECE_SIZE");
     
-    result = tetris_piece_is_cell_filled(PIECE_I, 0, 0, PIECE_SIZE);
-    TEST_ASSERT(result == false, "tetris_piece_is_cell_filled returns false for y >= PIECE_SIZE");
+    result = blocktris_piece_is_cell_filled(PIECE_I, 0, 0, PIECE_SIZE);
+    TEST_ASSERT(result == false, "blocktris_piece_is_cell_filled returns false for y >= PIECE_SIZE");
 }
 
 // Main rotation test runner
@@ -223,5 +224,5 @@ void run_rotation_tests(void) {
     RUN_TEST(test_rotation_bounds);
     RUN_TEST(test_piece_specific_shapes);
     RUN_TEST(test_rotations_are_different);
-    RUN_TEST(test_tetris_piece_is_cell_filled);
+    RUN_TEST(test_blocktris_piece_is_cell_filled);
 }

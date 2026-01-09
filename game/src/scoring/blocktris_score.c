@@ -1,13 +1,13 @@
 /**
- * @file tetris_score.c
- * @brief Tetris scoring system implementation
+ * @file blocktris_score.c
+ * @brief BlockTris scoring system implementation
  */
 
-#include "tetris_score.h"
+#include "blocktris_score.h"
 #include "constants.h"
 #include <stdio.h>
 
-void tetris_score_add_line_clear(game_t *game, int lines_cleared) {
+void blocktris_score_add_line_clear(game_t *game, int lines_cleared) {
     if (!game || lines_cleared < 1 || lines_cleared > 4) {
         return;
     }
@@ -30,17 +30,17 @@ void tetris_score_add_line_clear(game_t *game, int lines_cleared) {
     }
     
     // Apply level multiplier
-    int multiplier = tetris_score_get_level_multiplier(game->level);
+    int multiplier = blocktris_score_get_level_multiplier(game->level);
     game->score += base_points * multiplier;
     
     // Update lines cleared count
     game->lines_cleared += lines_cleared;
     
     // Update level
-    tetris_score_update_level(game);
+    blocktris_score_update_level(game);
 }
 
-void tetris_score_add_soft_drop(game_t *game, int cells_dropped) {
+void blocktris_score_add_soft_drop(game_t *game, int cells_dropped) {
     if (!game || cells_dropped < 1) {
         return;
     }
@@ -48,7 +48,7 @@ void tetris_score_add_soft_drop(game_t *game, int cells_dropped) {
     game->score += cells_dropped * POINTS_SOFT_DROP;
 }
 
-void tetris_score_add_hard_drop(game_t *game, int cells_dropped) {
+void blocktris_score_add_hard_drop(game_t *game, int cells_dropped) {
     if (!game || cells_dropped < 1) {
         return;
     }
@@ -56,7 +56,7 @@ void tetris_score_add_hard_drop(game_t *game, int cells_dropped) {
     game->score += cells_dropped * POINTS_HARD_DROP;
 }
 
-void tetris_score_update_level(game_t *game) {
+void blocktris_score_update_level(game_t *game) {
     if (!game) {
         return;
     }
@@ -68,11 +68,11 @@ void tetris_score_update_level(game_t *game) {
         game->level = new_level;
         
         // Update fall speed
-        game->fall_speed = tetris_score_calculate_fall_speed(game->level);
+        game->fall_speed = blocktris_score_calculate_fall_speed(game->level);
     }
 }
 
-int tetris_score_calculate_fall_speed(int level) {
+int blocktris_score_calculate_fall_speed(int level) {
     int speed = INITIAL_FALL_SPEED - ((level - 1) * SPEED_INCREASE_PER_LEVEL);
     
     // Minimum fall speed
@@ -83,12 +83,12 @@ int tetris_score_calculate_fall_speed(int level) {
     return speed;
 }
 
-int tetris_score_get_level_multiplier(int level) {
+int blocktris_score_get_level_multiplier(int level) {
     // Level multiplier increases with level
     return level;
 }
 
-void tetris_score_reset(game_t *game) {
+void blocktris_score_reset(game_t *game) {
     if (!game) {
         return;
     }
@@ -99,7 +99,7 @@ void tetris_score_reset(game_t *game) {
     game->fall_speed = INITIAL_FALL_SPEED;
 }
 
-void tetris_score_format_display(int score, char *buffer, size_t buffer_size) {
+void blocktris_score_format_display(int score, char *buffer, size_t buffer_size) {
     if (!buffer || buffer_size == 0) {
         return;
     }

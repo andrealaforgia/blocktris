@@ -1,6 +1,6 @@
 /**
  * @file game.c
- * @brief Core Tetris game state and lifecycle management implementation
+ * @brief Core BlockTris game state and lifecycle management implementation
  */
 
 #include "game.h"
@@ -44,7 +44,7 @@ bool game_init(game_t *game) {
     game_board_init(&game->board);
     
     // Initialize object pools
-    game->piece_pool = create_object_pool(sizeof(tetris_piece_t), MAX_PIECES);
+    game->piece_pool = create_object_pool(sizeof(blocktris_piece_t), MAX_PIECES);
     
     // Initialize game statistics
     game->score = 0;
@@ -90,7 +90,7 @@ void game_terminate(game_t *game) {
     // Free all game resources
     free_game_resources(game);
     
-    printf("Tetris game terminated successfully\n");
+    printf("BlockTris game terminated successfully\n");
 }
 
 void game_reset(game_t *game) {
