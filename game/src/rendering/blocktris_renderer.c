@@ -499,36 +499,37 @@ void blocktris_renderer_render_countdown(const game_t *game, const graphics_cont
     timestamp_ms_t current_time = get_clock_ticks_ms();
     timestamp_ms_t elapsed_time = current_time - game->countdown_start_time;
     
-    // Countdown sequence: "3" (2s), "2" (2s), "1" (0.5s), "GO!" (0.5s)
+    // Countdown sequence: "3", "2", "1", "GO!" - each appears quickly, stays 0.5s, then fades
+    // Total duration: 4 phases × 0.5s = 2 seconds
     const char* countdown_text;
     timestamp_ms_t phase_elapsed;
     font_color_t text_color;
     timestamp_ms_t fade_start_time;
     
-    if (elapsed_time < 2000) {
-        // Phase 1: Show "3" for first 2 seconds
+    if (elapsed_time < 500) {
+        // Phase 1: Show "3" for 0.5 seconds
         countdown_text = "3";
         phase_elapsed = elapsed_time;
         text_color = FONT_COLOR_YELLOW;
-        fade_start_time = 1500; // Fade in last 0.5 seconds
-    } else if (elapsed_time < 4000) {
-        // Phase 2: Show "2" for next 2 seconds
+        fade_start_time = 250; // Start fading after 0.25s (stay visible for 0.25s, then fade for 0.25s)
+    } else if (elapsed_time < 1000) {
+        // Phase 2: Show "2" for 0.5 seconds  
         countdown_text = "2";
-        phase_elapsed = elapsed_time - 2000;
+        phase_elapsed = elapsed_time - 500;
         text_color = FONT_COLOR_YELLOW;
-        fade_start_time = 1500; // Fade in last 0.5 seconds
-    } else if (elapsed_time < 4500) {
+        fade_start_time = 250; // Start fading after 0.25s
+    } else if (elapsed_time < 1500) {
         // Phase 3: Show "1" for 0.5 seconds
         countdown_text = "1";
-        phase_elapsed = elapsed_time - 4000;
+        phase_elapsed = elapsed_time - 1000;
         text_color = FONT_COLOR_YELLOW;
-        fade_start_time = 250; // No fade for fast transition
-    } else if (elapsed_time < 5000) {
+        fade_start_time = 250; // Start fading after 0.25s
+    } else if (elapsed_time < 2000) {
         // Phase 4: Show "GO!" for 0.5 seconds
         countdown_text = "GO!";
-        phase_elapsed = elapsed_time - 4500;
+        phase_elapsed = elapsed_time - 1500;
         text_color = FONT_COLOR_CYAN; // Use cyan as closest to green
-        fade_start_time = 250; // No fade for fast transition
+        fade_start_time = 250; // Start fading after 0.25s
     } else {
         // Countdown complete - don't render
         return;
@@ -540,8 +541,8 @@ void blocktris_renderer_render_countdown(const game_t *game, const graphics_cont
     // Calculate alpha for smooth fade-out effect
     int alpha = 255; // Start fully opaque
     if (phase_elapsed >= fade_start_time) {
-        // In fade-out period - linearly decrease alpha
-        timestamp_ms_t fade_duration = (strcmp(countdown_text, "1") == 0 || strcmp(countdown_text, "GO!") == 0) ? 250 : 500;
+        // In fade-out period - linearly decrease alpha (all phases fade for 0.25s)
+        timestamp_ms_t fade_duration = 250;
         timestamp_ms_t fade_time = phase_elapsed - fade_start_time;
         if (fade_time >= fade_duration) {
             // This phase fade complete

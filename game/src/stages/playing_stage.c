@@ -223,20 +223,15 @@ void playing_stage_update_countdown(playing_stage_state_t *state) {
         return;
     }
     
-    printf("DEBUG: Countdown is active!\n");
-    
     timestamp_ms_t current_time = get_clock_ticks_ms();
     timestamp_ms_t elapsed = current_time - state->game->countdown_start_time;
     
-    printf("DEBUG: Elapsed time: %llu ms\n", (unsigned long long)elapsed);
-    
-    // Total countdown duration: "3" (2s) + "2" (2s) + "1" (0.5s) + "GO!" (0.5s) = 5 seconds total
-    const int total_countdown_duration_ms = 5000;
+    // Total countdown duration: "3", "2", "1", "GO!" (each 0.5s) = 2 seconds total
+    const int total_countdown_duration_ms = 2000;
     
     if (elapsed >= total_countdown_duration_ms) {
         // Countdown finished - hide countdown and start the game
         state->game->show_countdown = false;
-        printf("DEBUG: Countdown finished - starting game!\n");
         playing_stage_spawn_new_piece(state);
     }
 }
