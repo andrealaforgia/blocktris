@@ -5,12 +5,16 @@
 
 #include "test_framework.h"
 #include "unit/test_rotation.h"
+#include "unit/test_window_dimensions.h"
 
 int main(void) {
     test_init();
     
     // Run rotation tests
     run_rotation_tests();
+    
+    // Run window dimension tests
+    run_window_dimension_tests();
     
     test_summary();
     

@@ -70,8 +70,8 @@ void blocktris_renderer_render_game(const game_t *game, const graphics_context_t
 void blocktris_renderer_render_board(const game_t *game, const graphics_context_t *graphics_context) {
     (void)game; // Board rendering doesn't need game state
     
-    // Playfield background removed for transparency
-    // blocktris_renderer_render_playfield_background(graphics_context);
+    // Render 80% transparent background for playfield
+    blocktris_renderer_render_playfield_background(graphics_context);
     
     blocktris_renderer_render_board_border(graphics_context);
     blocktris_renderer_render_board_grid(graphics_context);
@@ -434,22 +434,26 @@ void blocktris_renderer_render_background(const game_t *game, const graphics_con
 }
 
 void blocktris_renderer_render_playfield_background(const graphics_context_t *graphics_context) {
-    if (!graphics_context) {
+    if (!graphics_context || !graphics_context->renderer) {
         return;
     }
     
-    // Create semi-transparent dark gray background for the entire playfield area
+    // Create 80% transparent (20% opaque) dark gray background for the playfield area
     int padding = 10;
     int x = BOARD_OFFSET_X - padding;
     int y = BOARD_OFFSET_Y - padding;
     int width = BOARD_WIDTH * CELL_SIZE + padding * 2;
     int height = BOARD_HEIGHT * CELL_SIZE + padding * 2;
     
-    // Draw filled rectangle using horizontal lines
-    color_t semi_transparent_gray = COLOR(32, 32, 32); // Darker gray for better visibility
-    for (int line_y = y; line_y < y + height; line_y++) {
-        draw_line((graphics_context_t*)graphics_context, x, line_y, x + width, line_y, semi_transparent_gray);
-    }
+    // Set blend mode for alpha blending and draw semi-transparent rectangle
+    SDL_SetRenderDrawBlendMode(graphics_context->renderer, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawColor(graphics_context->renderer, 32, 32, 32, 51); // 51 = 20% of 255 (80% transparent)
+    
+    SDL_Rect rect = { x, y, width, height };
+    SDL_RenderFillRect(graphics_context->renderer, &rect);
+    
+    // Reset blend mode to default
+    SDL_SetRenderDrawBlendMode(graphics_context->renderer, SDL_BLENDMODE_NONE);
 }
 
 void blocktris_renderer_render_next_piece_background(const graphics_context_t *graphics_context) {
