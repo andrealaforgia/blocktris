@@ -1,0 +1,87 @@
+# Compiled binaries
+tetris
+*.o
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+
+# Build directories
+build/
+bin/
+obj/
+
+# Compiler and linker files
+*.d
+*.map
+*.lst
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Debug files
+*.dSYM/
+*.pdb
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Xcode (if using Xcode on macOS)
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xcuserstate
+project.xcworkspace/
+xcuserdata/
+
+# CMake (if using CMake)
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.cmake
+
+# Autotools
+autom4te.cache/
+config.log
+config.status
+configure
+Makefile.in
+aclocal.m4
+
+# Package managers
+node_modules/
+*.lock
+
+# Custom build artifacts
+*.out
+core
+a.out
+
+# Test coverage
+*.gcda
+*.gcno
+*.gcov
+coverage/
+
+# Valgrind
+*.valgrind
