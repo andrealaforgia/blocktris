@@ -70,8 +70,8 @@ void blocktris_renderer_render_game(const game_t *game, const graphics_context_t
 void blocktris_renderer_render_board(const game_t *game, const graphics_context_t *graphics_context) {
     (void)game; // Board rendering doesn't need game state
     
-    // Render semi-transparent background for playfield
-    blocktris_renderer_render_playfield_background(graphics_context);
+    // Playfield background removed for transparency
+    // blocktris_renderer_render_playfield_background(graphics_context);
     
     blocktris_renderer_render_board_border(graphics_context);
     blocktris_renderer_render_board_grid(graphics_context);
