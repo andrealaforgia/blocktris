@@ -12,9 +12,9 @@
 // Screen height scale factor (window will be 90% of actual screen height)
 #define SCREEN_HEIGHT_SCALE 0.9
 
-// BlockTris board dimensions (this implementation uses 20x30)
-#define BOARD_WIDTH 20
-#define BOARD_HEIGHT 30
+// BlockTris board dimensions (optimized for pentomino gameplay)
+#define BOARD_WIDTH 12
+#define BOARD_HEIGHT 24
 
 // Piece dimensions
 #define PIECE_SIZE 5 // 5x5 grid for each piece
